@@ -1,0 +1,58 @@
+{
+  "name": "Conference Buddy Workshop",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  // Codespace secrets land in the environment automatically. Declaring them here
+  // makes GitHub prompt for them on the "create codespace" screen, which is how
+  // attendees get asked for a key without you explaining anything.
+  "secrets": {
+    "ANTHROPIC_API_KEY": {
+      "description": "Anthropic API key. Leave blank if you're using another provider.",
+      "documentationUrl": "https://console.anthropic.com/settings/keys"
+    },
+    "OPENAI_API_KEY": {
+      "description": "OpenAI API key. Only needed if BUDDY_MODEL is set to an openai: model."
+    },
+    "GOOGLE_API_KEY": {
+      "description": "Google AI Studio key. Only needed if BUDDY_MODEL is set to a google_genai: model."
+    },
+    "BUDDY_MODEL": {
+      "description": "Optional. Defaults to anthropic:claude-sonnet-4-6. Try openai:gpt-5.5 or google_genai:gemini-3.6-flash."
+    },
+    "LANGSMITH_API_KEY": {
+      "description": "Optional. Set LANGSMITH_TRACING=true as well to trace runs."
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.jupyter-renderers"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "jupyter.widgetScriptSources": ["jsdelivr.com", "unpkg.com"],
+        "notebook.output.textLineLimit": 200,
+        "files.exclude": {
+          "**/__pycache__": true,
+          "**/*.egg-info": true
+        }
+      }
+    }
+  },
+
+  // Two cores is enough. The bottleneck is the model, not the container.
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "4gb",
+    "storage": "32gb"
+  },
+
+  "postAttachCommand": {
+    "welcome": "cat .devcontainer/WELCOME.txt"
+  }
+}

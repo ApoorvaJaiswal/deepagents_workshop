@@ -1,0 +1,16 @@
+
+  ╭──────────────────────────────────────────────────────────────╮
+  │  Conference Buddy — building agents with deepagents          │
+  │  WeAreDevelopers World Congress North America 2026           │
+  ╰──────────────────────────────────────────────────────────────╯
+
+  1.  Open  conference_buddy.ipynb
+  2.  Pick the kernel  "Conference Buddy (Python 3.11)"  (top right)
+  3.  Run the cells in order
+
+  Dependencies and the dataset are already installed. The %pip cell in
+  section 0 will detect that and skip.
+
+  Stuck?  Everything except the model call runs locally, so a flaky
+  network only breaks the agent cells, not the tool cells.
+
