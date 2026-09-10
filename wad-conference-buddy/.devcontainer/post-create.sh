@@ -1,24 +1,14 @@
 #!/usr/bin/env bash
-# Runs once when the codespace is created (or baked in, if you enable prebuilds).
+# Runs for every codespace, including ones restored from a prebuild. Keep it fast.
 set -euo pipefail
 
-echo "Installing dependencies..."
-pip install --upgrade pip --quiet
-pip install --quiet -e ".[all-providers]" jupyterlab ipykernel
-
-echo "Building the conference dataset..."
-python scripts/build_dataset.py
-
-# Register a kernel with a name attendees will recognise in the notebook picker.
-python -m ipykernel install --user --name conference-buddy \
-    --display-name "Conference Buddy (Python 3.11)" >/dev/null
-
+# Prebuild images can predate a dependency bump; this is a no-op when current.
+pip install --quiet -e ".[all-providers]" 2>/dev/null || true
+[ -f data/sessions.json ] || python scripts/build_dataset.py
 mkdir -p workspace
 
-# Warn early rather than at cell 3.
 MODEL="${BUDDY_MODEL:-anthropic:claude-sonnet-4-6}"
-PROVIDER="${MODEL%%:*}"
-case "$PROVIDER" in
+case "${MODEL%%:*}" in
     anthropic)    KEY_VAR="ANTHROPIC_API_KEY" ;;
     openai)       KEY_VAR="OPENAI_API_KEY" ;;
     google_genai) KEY_VAR="GOOGLE_API_KEY" ;;
@@ -26,17 +16,8 @@ case "$PROVIDER" in
 esac
 
 if [ -n "$KEY_VAR" ] && [ -z "${!KEY_VAR:-}" ]; then
-    cat <<EOF
-
-  ⚠  $KEY_VAR is not set.
-
-     Either add it as a Codespace secret
-       github.com/settings/codespaces  →  New secret  →  scope it to this repo
-     then rebuild the container, or just let the notebook prompt you for it.
-
-     The notebook falls back to getpass, so you are not blocked either way.
-
-EOF
+    echo ""
+    echo "  ⚠  $KEY_VAR is not set. The notebook will prompt you for it."
+    echo "     To avoid the prompt: github.com/settings/codespaces → New secret"
+    echo ""
 fi
-
-echo "Setup complete."

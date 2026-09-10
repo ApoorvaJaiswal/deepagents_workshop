@@ -1,16 +1,15 @@
-
   ╭──────────────────────────────────────────────────────────────╮
   │  Conference Buddy — building agents with deepagents          │
   │  WeAreDevelopers World Congress North America 2026           │
   ╰──────────────────────────────────────────────────────────────╯
 
+  If you can read this box, the dev container set itself up correctly:
+  Python, Jupyter, the dependencies and the dataset are all in place.
+
   1.  Open  conference_buddy.ipynb
-  2.  Pick the kernel  "Conference Buddy (Python 3.11)"  (top right)
-  3.  Run the cells in order
+  2.  Run the first cell. The kernel should be picked for you; if you
+      are asked, choose  Python 3.11  at  /usr/local/bin/python
+  3.  Keep going in order.
 
-  Dependencies and the dataset are already installed. The %pip cell in
-  section 0 will detect that and skip.
-
-  Stuck?  Everything except the model call runs locally, so a flaky
-  network only breaks the agent cells, not the tool cells.
-
+  Didn't see this box, or the notebook has no kernel?
+      Command Palette (F1) → "Codespaces: Rebuild Container"
