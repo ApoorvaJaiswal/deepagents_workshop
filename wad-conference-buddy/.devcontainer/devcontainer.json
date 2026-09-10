@@ -1,18 +1,13 @@
 {
   "name": "Conference Buddy Workshop",
   "image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
-
-  // onCreateCommand IS baked into prebuilds. postCreateCommand is NOT — it reruns
-  // for every codespace even when one is created from a prebuild. Anything slow
-  // belongs here, or prebuilds buy you nothing.
-  "onCreateCommand": "bash .devcontainer/on-create.sh",
-
-  // Cheap, per-codespace, runs after the prebuild image is restored.
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
-
+  "onCreateCommand": "bash .devcontainer/setup.sh",
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postAttachCommand": { "verify": "bash .devcontainer/verify.sh" },
+  "waitFor": "postCreateCommand",
   "secrets": {
     "ANTHROPIC_API_KEY": {
-      "description": "Anthropic API key. Leave blank if you're using another provider.",
+      "description": "Anthropic API key. Leave blank if you are using another provider.",
       "documentationUrl": "https://console.anthropic.com/settings/keys"
     },
     "OPENAI_API_KEY": {
@@ -25,28 +20,18 @@
       "description": "Optional. Defaults to anthropic:claude-sonnet-4-6."
     }
   },
-
   "customizations": {
     "vscode": {
-      // Installed at container creation. If you add these to a RUNNING codespace,
-      // you must Rebuild Container for them to appear.
       "extensions": [
         "ms-python.python",
         "ms-toolsai.jupyter",
         "ms-toolsai.jupyter-renderers"
       ],
       "settings": {
-        // Must match the interpreter on-create.sh installs into, or the kernel
-        // picker offers you an environment with no deps in it.
-        "python.defaultInterpreterPath": "/usr/local/bin/python",
-        "jupyter.kernels.excludePythonEnvironments": [],
         "notebook.output.textLineLimit": 200,
         "files.exclude": { "**/__pycache__": true, "**/*.egg-info": true }
       }
     }
   },
-
-  "hostRequirements": { "cpus": 2, "memory": "4gb", "storage": "32gb" },
-
-  "postAttachCommand": { "welcome": "cat .devcontainer/WELCOME.txt" }
+  "hostRequirements": { "cpus": 2, "memory": "4gb" }
 }
